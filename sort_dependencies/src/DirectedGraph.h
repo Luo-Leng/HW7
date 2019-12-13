@@ -22,7 +22,7 @@ private:
     // Here a node B is considered a "neighbour" of a node A when there is a edge that goes from A to B
     map<int, SingleLinkedList<int> *> nodes;
 
-    void topologySort(int, LinkedStack<int> &, bool visited[]);
+    void topologySort(int val, LinkedStack<int> &, set<int> &);
 
 
 public:

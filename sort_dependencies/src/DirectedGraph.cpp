@@ -30,19 +30,18 @@ void DirectedGraph::printGraph() {
     }
 }
 
-
-void DirectedGraph::topologySort(int val, LinkedStack<int> &Stack, bool visited[])
-
+//https://www.includehelp.com/cpp-programs/topological-sort-implementation.aspx
+void DirectedGraph::topologySort(int val, LinkedStack<int> &Stack, set<int>& visited)
 {
 
-    visited[val] = true;
-    for (auto it = nodes.begin(); it != nodes.end(); it++) {
-        for (auto itl = (*it).second->begin(); itl != (*it).second->end(); itl++) {
-            if(!visited[*itl])
+    visited.insert(val);
+    for (auto it = nodes[val]->begin(); it != nodes[val]->end(); it++) {
+
+            if((visited.find((*it))==visited.end()))
             {
-                topologySort(*itl,  Stack, visited);
+                topologySort(*it, Stack, visited);
             }
-        }
+
     }
 
     Stack.push(val);
@@ -54,14 +53,17 @@ vector<int> *DirectedGraph::topologySort() {
     LinkedStack<int> Stack;
     int V = nodes.size();
 
-    bool *visited = new bool[V];
-    for (int i = 0; i < V; i++)
-        visited[i] = false;
+    set<int> visited;
+    for(auto it = nodes.begin();it!=nodes.end();it++){
+        //https://www.cs.helsinki.fi/u/tpkarkka/alglib/k06/lectures/iterators.html
+        //Algorithm find -----subrange of a sequence
+        if((visited.find((*it).first)==visited.end()))
+        {
+            topologySort((*it).first, Stack, visited);
+        }
+    }
 
 
-    for (int i = 0; i < V; i++)
-        if (visited[i] == false)
-            topologySort(i,  Stack, visited);
     while (Stack.isEmpty() == false)
     {
         ret->push_back(Stack.peek());
